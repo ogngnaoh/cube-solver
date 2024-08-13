@@ -25,7 +25,7 @@ Let’s break down the arguments passed to this function:
     - **`cv2.RETR_TREE`**: This mode retrieves all the contours and reconstructs a full hierarchy of nested contours. This means it will not only find the outermost contours (as some other modes do) but will also build a tree structure showing the relationship between contours and their parent-child hierarchy. This is useful if you need to understand the nested structure of objects within an image, such as in cases where one object is inside another.
 
   - **Why `cv2.RETR_TREE` is Used Here**:
-    - While the code only uses the largest contour, `cv2.RETR_TREE` is chosen perhaps for flexibility, allowing you to potentially analyze the relationships between contours if needed. In some cases, understanding which contours are inside others could be important, although in this case, only the largest one is used.
+    - While the code only uses the largest contour, `cv2.RETR_TREE` is chosen for flexibility, allowing you to analyze the relationships between contours if needed. In some cases, understanding which contours are inside others could be important, although in this case, only the largest one is used.
 
 #### **c. `cv2.CHAIN_APPROX_SIMPLE` (Third Argument)**
 - **`cv2.CHAIN_APPROX_SIMPLE`**: This is the contour approximation method, which controls how much detail is stored in the contour points.
@@ -34,7 +34,7 @@ Let’s break down the arguments passed to this function:
     - **`cv2.CHAIN_APPROX_SIMPLE`**: This method compresses the contour points by removing all redundant points and retaining only the essential points that form the shape of the contour. For example, if you have a straight line, instead of storing every point along the line, it would store just the two endpoints, significantly reducing memory usage and simplifying the contour data.
 
   - **Why `cv2.CHAIN_APPROX_SIMPLE` is Used Here**:
-    - This method is typically chosen to optimize memory usage and processing time by simplifying the contour data. In many cases, especially in object detection, only the general shape of the object is needed, so simplifying the contour to its essential points is beneficial.
+    - This method is chosen to optimize memory usage and processing time by simplifying the contour data. In many cases, especially in object detection, only the general shape of the object is needed, so simplifying the contour to its essential points is beneficial.
 
 ### **Summary of the Entire Line**
 This line of code:
