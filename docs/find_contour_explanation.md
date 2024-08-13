@@ -1,5 +1,3 @@
-The line of code you're asking about is crucial for detecting and analyzing the shapes or outlines (contours) of objects within an image. Here’s a detailed breakdown of each component:
-
 ### **1. Contours**
 
 **`contours`**: 
