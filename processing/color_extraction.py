@@ -13,10 +13,6 @@ def extract_roi(image, contours):
 
         rois.append(roi)
 
-    # converts the color spaces of the ROIs to make it easier to detect the colors and build cube state
-    for contour in rois:
-        cv.cvtColor(contour, cv.COLOR_BGR2HSV)
-
     return rois
 
 
@@ -54,7 +50,7 @@ def sort_contours(contours):
             current_row.append(contour)
         else:
             # checks if the y coordinate of the contours are in the same row, if they are, append to current row
-            if abs(centroid_y - threshold_y) <= threshold_h // 2:
+            if abs(centroid_y - threshold_y) <= threshold_h:
                 current_row.append(contour)
 
             # sorts row by x-coordinates
@@ -73,24 +69,29 @@ def sort_contours(contours):
     return sorted_contours
 
 
+# used to classify colors based on where they fall in the HSV ranges
 def classify_color(rois, color_ranges):
     classified_colors = []
 
     for roi in rois:
-        # gives average hsv values over all the pixels in the bounding box/ROI
-        mean_hsv = cv.mean(roi)[:3]
 
+        hsv_roi = cv.cvtColor(roi, cv.COLOR_BGR2HSV)
+        max_area = 0
         detected_color = None
 
         for color, (lower, upper) in color_ranges.items():
             lower = np.array(lower, dtype="uint8")
             upper = np.array(upper, dtype="uint8")
 
-            mask = cv.inRange(np.array(mean_hsv, dtype='uint8'), lower, upper)
+            # create mask for current color range
+            mask = cv.inRange(hsv_roi, lower, upper)
 
-            if np.any(mask):
+            # calculate area for this mask
+            area = cv.countNonZero(mask)
+
+            if area > max_area:
+                max_area = area
                 detected_color = color
-                break
 
         classified_colors.append(detected_color)
 
@@ -104,4 +105,3 @@ def check_sorting(image, contours):
         cx, cy = calculate_centroid(contour)
 
         cv.putText(image, str(i), (cx, cy), cv.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 2)
-

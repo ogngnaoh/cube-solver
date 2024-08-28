@@ -1,9 +1,8 @@
-import os
 from check_square import is_square
 import cv2 as cv
 import numpy as np
 from filter_contours import filter_contours, remove_child_squares
-from color_extraction import sort_contours, extract_roi, classify_color, check_sorting
+from color_extraction import sort_contours, extract_roi, classify_color
 from colors import color_ranges
 
 
@@ -23,9 +22,6 @@ def preprocess_image(image_path):
 
     # find contours
     contours, _ = cv.findContours(dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-
-    # make copy so that contours can be drawn without affecting the original image
-    image_with_contours = image.copy()
 
     # processing the contours to separate the cube stickers from the rest of the noise
     approximated_contours = []
@@ -51,16 +47,3 @@ def preprocess_image(image_path):
     classified_colours = classify_color(rois, color_ranges)
 
     return classified_colours
-    # return image_with_contours
-
-
-image_dir = r'C:\Users\ngovi\OneDrive\Desktop\cv_project\cube_faces'
-processed_dir = r'C:\Users\ngovi\OneDrive\Desktop\cv_project\processed_cube_faces'
-
-for filename in os.listdir(image_dir):
-    image_path = os.path.join(image_dir, filename)
-    print(preprocess_image(image_path))
-    # processed_image = preprocess_image(image_path)
-    # base_name = os.path.splitext(filename)[0]
-    # new_filename = f'{base_name}_processed.jpg'
-    # cv.imwrite(os.path.join(processed_dir, new_filename), processed_image)
